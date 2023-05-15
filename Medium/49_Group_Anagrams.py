@@ -6,38 +6,19 @@ import time
 
 class Solution:
     def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        grid = []
+        anagrams = dict()
+        i = 0
         for str in strs:
-            added = False
-            for anagrams in grid:
-                if self.isAnagram(str, anagrams[0]):
-                    anagrams.append(str)
-                    added = True
-                    break
-            if not added:
-                grid.append([str])
-        return grid
+           sortedStr = ''.join(sorted(str))
+           if sortedStr in anagrams.keys():
+               anagrams[sortedStr].append(i)
+           else:
+               anagrams[sortedStr] = [i]
+           i+=1
+        for key in anagrams.keys():
+            anagrams[key] = list(map(lambda x: strs[x], anagrams[key]))
+        return list(anagrams.values())
 
-    anadict = dict()
-
-    def isAnagram(self, s: str, t: str) -> bool:
-        if len(s) != len(t):
-            return False
-
-        h1: int
-        h2: int
-        if s in self.anadict.keys():
-            h1 = self.anadict.get(s)
-        else:
-            h1 = str(sorted(s)).__hash__()
-            self.anadict[s] = h1
-
-        if t in self.anadict.keys():
-            h2 = self.anadict.get(t)
-        else:
-            h2 = str(sorted(t)).__hash__()
-            self.anadict[t] = h2
-        return h1 == h2
 
 if __name__ == '__main__':
     sol = Solution()
